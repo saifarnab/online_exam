@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<h2>Papers</h2>
+    <ul class="list3" style="font-size:14px">
+      {% for item in papers %}
+      <li>
+        <b>
+          <p style="margin-bottom:6px">Paper Name: <a style="margin-bottom:1px" href="#">{{item.paper_name}}</a></p>
+          <p style="margin-bottom:4px">Date: {{item.date}}</p>
+          <p style="margin-bottom:4px">Starting Time: {{item.start_time}}</p>
+          <p style="margin-bottom:4px">Ending Time: {{item.end_time}}</p>
+        </b>
+      </li>
+      <hr>
+      {% endfor %}
+    </ul>
+{% endblock %}
