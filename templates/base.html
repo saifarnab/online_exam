@@ -18,86 +18,30 @@
 <body id="page3">
   <div id="main">
     <!-- HEADER -->
-    <div id="header">
-      <div class="logo"><a href="#"><img src="{% static 'images/logo.gif' %}" alt="" /></a></div>
-      <div class="banner-list">
-        <ul>
-          <li class="style1"><a href="{% url 'createpaper' %}"><span><strong>Create Paper</strong>Click here to see your results.</span></a></li>
-          <li class="style1"><a href="{% url 'createquestion' %}"><span><strong>Add Question</strong>Click here to see your results.</span></a></li>
-          <li class="style1"><a href="{% url 'createuser' %}"><span><strong>Create User</strong>Click here to create users.</span></a></li>
-        </ul>
-      </div>
-      <div class="site-nav">
-        <ul>
-          <li class="style1"><a href="index.html"><span>Home</span></a></li>
-          <li class="style2"><a href="about-us.html"><span>About Us</span></a></li>
-          <li class="style3"><a href="{% url 'papers' %}"><span>Papers</span></a></li>
-          <li class="style4"><a href="contact-us.html"><span></span>Users</a></li>
-          <li class="style5"><a href="{% url 'logout' %}"><span>Logout</span></a></li>
+    <div id="header" style="height:150px; ">
+<!--      <div class="logo"><a href="#"><img src="{% static 'images/logo.gif' %}" alt="" /></a></div>-->
+<!--      <div class="banner-list">-->
+<!--        <ul>-->
+<!--          <li class="style1"><a href="{% url 'createpaper' %}"><span><strong>Create Paper</strong>Click here to see your results.</span></a></li>-->
+<!--          <li class="style1"><a href="{% url 'createquestion' %}"><span><strong>Add Question</strong>Click here to see your results.</span></a></li>-->
+<!--          <li class="style1"><a href="{% url 'createuser' %}"><span><strong>Create User</strong>Click here to create users.</span></a></li>-->
+<!--        </ul>-->
+<!--      </div>-->
+      <div class="site-nav" style="position:inherit; width: 91%;margin: 0 auto;">
+        <ul style="margin-top: -100px;">
+          <li class=""><a href="{% url 'papers' %}" style="height:0; width:134px;"><span>Papers</span></a></li>
+          <li class=""><a href="{% url 'createpaper' %}" style="height:0; width:134px;"><span>Add Papers</span></a></li>
+          <li class=""><a href="{% url 'createquestion' %}" style="height:0; width:134px;"><span>Add Question</span></a></li>
+          <li class=""><a href="#" style="height:0; width:134px;"><span></span>Users</a></li>
+          <li class=""><a href="{% url 'createuser' %}" style="height:0; width:134px;"><span>Add User</span></a></li>
+          <li class=""><a href="{% url 'logout' %}" style="height:0; width:134px;"><span>Logout</span></a></li>
         </ul>
       </div>
     </div>
     <!-- CONTENT -->
     <div id="content">
-      <div class="inner_copy">More <a href="#">Website Templates</a> @ Templates.com!</div>
       <div class="wrapper">
-        <div class="col-1">
-          <div class="box">
-            <div class="border-top">
-              <div class="left-top-corner">
-                <div class="right-top-corner">
-                  <div class="inner">
-                    <h3>Latest News:</h3>
-                    <ul class="list" style="font-size: 12px;">
-                      <li><b><a href="#">February 15, 2010</a></b>Sed ut perspiciatis unde omnis iste natus dolorque
-                        laudantium aperiam.</li>
-                      <li><b><a href="#">February 07, 2010</a></b>Eaque ipsa quae ab illo inventore veritatis explicabo
-                        emo enim.</li>
-                      <li><b><a href="#">January 31, 2010</a></b>Gpsam voluptatem quia voluptas sit ed quia consequuntur
-                        magni dolores eos qui.</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="box" >
-            <div class="border-top">
-              <div class="left-top-corner">
-                <div class="right-top-corner">
-                  <div class="inner">
-                    <h3>Poll:</h3>
-<!--                    <h4>Lorem ipsum dolor sit amet, consecte- tur adipisicing elit?</h4>-->
-<!--                    <form action="#" method="post" id="form" >-->
-<!--                      <div class="form">-->
-<!--                        <input type="radio" name="name1" checked="checked" />-->
-<!--                        <label>Sed do eiusmod tempor incididunt</label>-->
-<!--                      </div>-->
-<!--                      <div class="form">-->
-<!--                        <input type="radio" name="name1" />-->
-<!--                        <label>Utlabore et dolore magna aliqua</label>-->
-<!--                      </div>-->
-<!--                      <div class="form">-->
-<!--                        <input type="radio" name="name1" />-->
-<!--                        <label>Enim ad minim veniam</label>-->
-<!--                      </div>-->
-<!--                      <div class="form">-->
-<!--                        <input type="radio" name="name1" />-->
-<!--                        <label>Quis nostrud exercitation ullamco</label>-->
-<!--                      </div>-->
-<!--                      <div class="form">-->
-<!--                        <input type="radio" name="name1" />-->
-<!--                        <label>Laboris nisi ut aliquip ex ea commodo</label>-->
-<!--                      </div>-->
-<!--                      <div class="button"><a href="#"><em><b>Vote<span>Vote</span></b></em></a></div>-->
-<!--                    </form>-->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-2">
+        <div >
           {% block content %}
           {% endblock %}
         </div>

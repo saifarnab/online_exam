@@ -126,7 +126,7 @@ h4 {font-size:1em;color:#092972;margin-bottom:25px}
 .box1 {width:100%;background:#f5f5f5}
 .box1 .inner {padding:26px 30px 28px 29px}
 /* HEADER */
-#header {height:481px;border-bottom:5px solid #f5f8ff;background:url(images/header-bg.jpg) no-repeat right bottom;position:relative}
+#header {height:481px;border-bottom:5px solid #f5f8ff;right bottom;position:relative}
 #header .logo {position:absolute;left:6px;top:26px}
 /* CONTENT */
 #content {padding:35px 0 30px 0}
