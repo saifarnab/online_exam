@@ -49,7 +49,8 @@ def create_user(request):
 
 def papers(request):
     user_role = get_user_role(request)
-    papers = list(Paper.objects.all().values())
+    papers = list(Paper.objects.all().values('teacher__user__username', 'paper_name', 'start_time', 'end_time', 'date'))
+    print(papers)
     return render(request, 'papers_tables.html', {'papers': papers, 'user_role': user_role})
 
 
@@ -124,7 +125,7 @@ def questions(request):
     qry = list(Paper.objects.all().values('paper_id', 'paper_name'))
     if request.method == 'POST':
         paper_id = request.POST.get('paper_name', '')
-        paper = list(Paper.objects.filter(paper_id=paper_id).values('paper_name', 'date', 'start_time', 'end_time'))[0]
+        paper = list(Paper.objects.filter(paper_id=paper_id).values('teacher__user__username', 'paper_name', 'date', 'start_time', 'end_time'))[0]
         question = list(Question.objects.filter(paper_id__paper_id=paper_id).values('question_id'))
         questions_id = set()
         for item in question:
