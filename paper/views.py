@@ -18,11 +18,16 @@ def get_user_role(request):
 
 def login(request):
     if request.method == 'POST':
+        message = ''
         name = request.POST.get('name', '')
         password = request.POST.get('pass', '')
         user = authenticate(username=name, password=password)
         request.session['user'] = name
-        profile = list(Profile.objects.filter(user=user).values())[0]
+        try:
+            profile = list(Profile.objects.filter(user=user).values())[0]
+        except:
+            message = 'Invalid Credentials'
+            return render(request, 'authentication-login.html', {'message': message})
         # if profile.get('role') == 'Teacher':
         return redirect(papers)
 
