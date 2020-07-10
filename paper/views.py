@@ -189,15 +189,17 @@ def create_question(request):
 
 
 def papers_list(request):
+    print('hit')
     user_role = get_user_role(request)
     data = int(request.GET['id'])
-    qry = Paper.objects.filter(paper_id=data).values_list('date', 'start_time', 'end_time', )
+    qry = Paper.objects.filter(paper_id=data).values_list('date', 'start_time', 'end_time', 'teacher__user__username', )
     paper = Paper.objects.filter(paper_id=data)
     qry_list = list(qry)
     date = qry_list[0][0]
     date_time = date.strftime("%m/%d/%Y")
     start_time = qry_list[0][1]
     end_time = qry_list[0][2]
+    teacher = qry_list[0][3]
     print(start_time, end_time)
-    data = str(date_time) + ',' + start_time + ',' + end_time
+    data = str(date_time) + ',' + start_time + ',' + end_time + ',' + teacher
     return HttpResponse(data)

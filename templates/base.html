@@ -210,6 +210,7 @@
                 document.getElementById("date").value = res[0];
                 document.getElementById("start_time").value = res[1];
                 document.getElementById("end_time").value = res[2];
+                document.getElementById("teacher").value = res[3];
                 console.log(res)
             }
          })
@@ -222,6 +223,8 @@
       var row = table.insertRow(table_len);
       var answer = document.getElementById("answer").value;
       var correct = document.getElementById("correct").checked;
+      document.getElementById("answer").value = "";
+      document.getElementById("correct").checked = false;
       if (correct == true ) {
         correct = "Correct";
       }else {
