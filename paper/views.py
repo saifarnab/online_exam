@@ -10,6 +10,12 @@ from django.db.models import Max
 from django.contrib.auth import logout
 
 
+def get_user_role(request):
+    user = request.session['user']
+    profile = list(Profile.objects.filter(user__username=user).values())[0]
+    return profile.get('role')
+
+
 def login(request):
     if request.method == 'POST':
         name = request.POST.get('name', '')
@@ -20,7 +26,7 @@ def login(request):
         # if profile.get('role') == 'Teacher':
         return redirect(papers)
 
-    return render(request, 'login.html', {})
+    return render(request, 'authentication-login.html', {})
 
 
 def logout_session(request):
@@ -29,6 +35,7 @@ def logout_session(request):
 
 
 def create_user(request):
+    user_role = get_user_role(request)
     if request.method == 'POST':
         name = request.POST.get('username', '')
         password = request.POST.get('password', '')
@@ -36,26 +43,35 @@ def create_user(request):
         print(name, password, role)
         user = User.objects.create_user(username=name, password=password)
         profile = Profile.objects.create(user=user, role=role)
-    return render(request, 'create_user.html', {})
+        return redirect(users)
+    return render(request, 'create_user.html', {'user_role': user_role})
 
 
 def papers(request):
+    user_role = get_user_role(request)
     papers = list(Paper.objects.all().values())
-    paper_list = []
-    for paper in papers:
-        date = paper.get('date')
-        date_time = date.strftime("%m/%d/%Y")
-        json = {
-            'paper_name': paper.get('paper_name'),
-            'date': date_time,
-            'start_time': paper.get('start_time'),
-            'end_time': paper.get('end_time'),
-        }
-        paper_list.append(json)
-    return render(request, 'papers.html', {'papers': paper_list})
+    return render(request, 'papers_tables.html', {'papers': papers, 'user_role': user_role})
+
+
+def users(request):
+    user_role = get_user_role(request)
+    if user_role != 'SuperUser':
+        return redirect(login)
+    profiles = list(Profile.objects.filter().values_list('user__username', 'role'))
+    users_list = []
+    for i in range(len(profiles)):
+        if profiles[i][1] != 'SuperUser':
+            user_dict = {
+                'user': profiles[i][0],
+                'role': profiles[i][1]
+            }
+            users_list.append(user_dict)
+
+    return render(request, 'users_tables.html', {'user_role': user_role, 'user_list': users_list})
 
 
 def create_papers(request):
+    user_role = get_user_role(request)
     username = request.session['user']
     if request.method == 'POST':
         profile = list(Profile.objects.filter(user__username=username))[0]
@@ -65,14 +81,80 @@ def create_papers(request):
         starting_time = request.POST.get('start_time', '')
         ending_time = request.POST.get('end_time', '')
         temp_date = parse_date(date)
-        print(temp_date)
-        print(name, date, starting_time, ending_time)
-        paper = Paper.objects.create(paper_name=name, date=temp_date, start_time=starting_time, end_time=ending_time, teacher=profile)
+        start_time = starting_time
+        s_time = int(start_time.split(':')[0])
+        if s_time == 12:
+            s_time_am_pm_checker = 'P.M.'
+        elif s_time == 0:
+            s_time += 12
+            s_time_am_pm_checker = 'A.M.'
+        else:
+            if s_time >= 13:
+                s_time -= 12
+                s_time_am_pm_checker = 'P.M.'
+            else:
+                s_time_am_pm_checker = 'A.M.'
+
+        s_time_am_pm = str(s_time) + ':' + start_time.split(':')[1] + ' ' + str(s_time_am_pm_checker)
+        end_time = ending_time
+        print(end_time)
+        e_time = int(end_time.split(':')[0])
+        if e_time == 12:
+            e_time_am_pm_checker = 'P.M.'
+        elif e_time == 0:
+            e_time += 12
+            e_time_am_pm_checker = 'A.M.'
+        else:
+            if e_time >= 13:
+                e_time -= 12
+                e_time_am_pm_checker = 'P.M.'
+            else:
+                e_time_am_pm_checker = 'A.M.'
+
+        e_time_am_pm = str(e_time) + ':' + end_time.split(':')[1] + ' ' + str(e_time_am_pm_checker)
+        paper = Paper.objects.create(paper_name=name, date=temp_date, start_time=s_time_am_pm, end_time=e_time_am_pm, teacher=profile)
         return redirect(papers)
-    return render(request, 'createpaper.html', {})
+    return render(request, 'createpaper.html', {'user_role': user_role})
+
+
+def questions(request):
+    user_role = get_user_role(request)
+    if user_role == 'Student':
+        return redirect(login)
+    qry = list(Paper.objects.all().values('paper_id', 'paper_name'))
+    if request.method == 'POST':
+        paper_id = request.POST.get('paper_name', '')
+        paper = list(Paper.objects.filter(paper_id=paper_id).values('paper_name', 'date', 'start_time', 'end_time'))[0]
+        question = list(Question.objects.filter(paper_id__paper_id=paper_id).values('question_id'))
+        questions_id = set()
+        for item in question:
+            questions_id.add(item.get('question_id'))
+        questions = []
+        que = {}
+        for question_id in questions_id:
+            question = list(Question.objects.filter(question_id=question_id).values('question', 'choice', 'answer'))
+            que = {
+                'question_name': question[0].get('question'),
+                'choices': [],
+                'answer': []
+            }
+            choice = []
+            answer = []
+            for item in question:
+                choice.append(item.get('choice'))
+                if item.get('answer') == 'Correct':
+                    answer.append(item.get('choice'))
+            que['choices'] = choice
+            que['answer'] = answer
+            questions.append(que)
+        print(questions)
+        return render(request, 'questions_tables.html', {'user_role': user_role, 'paper_list': qry, 'paper': paper, 'questions': questions})
+
+    return render(request, 'questions_tables.html', {'user_role': user_role, 'paper_list': qry})
 
 
 def create_question(request):
+    user_role = get_user_role(request)
     username = request.session['user']
     if request.method == 'POST':
         profile = list(Profile.objects.filter(user__username=username))[0]
@@ -102,10 +184,11 @@ def create_question(request):
                 break
 
     qry = list(Paper.objects.all().values('paper_id', 'paper_name'))
-    return render(request, 'createquestion.html', {'paper_list': qry})
+    return render(request, 'createquestion.html', {'paper_list': qry, 'user_role': user_role})
 
 
 def papers_list(request):
+    user_role = get_user_role(request)
     data = int(request.GET['id'])
     qry = Paper.objects.filter(paper_id=data).values_list('date', 'start_time', 'end_time', )
     paper = Paper.objects.filter(paper_id=data)

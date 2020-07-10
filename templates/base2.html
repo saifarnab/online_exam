@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+  <title>Winter Olympics | Articles</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <link href="{% static 'style.css' %}" rel="stylesheet" type="text/css" />
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="{% static 'js/cufon-yui.js' %}" type="text/javascript"></script>
+  <script src="{% static 'js/cufon-replace.js' %}" type="text/javascript"></script>
+  <script src="{% static 'js/Myriad_Pro_400.font.js' %}" type="text/javascript"></script>
+</head>
+
+<body id="page3">
+  <div id="main">
+    <!-- HEADER -->
+    <div id="header" style="height:150px; ">
+<!--      <div class="logo"><a href="#"><img src="{% static 'images/logo.gif' %}" alt="" /></a></div>-->
+<!--      <div class="banner-list">-->
+<!--        <ul>-->
+<!--          <li class="style1"><a href="{% url 'createpaper' %}"><span><strong>Create Paper</strong>Click here to see your results.</span></a></li>-->
+<!--          <li class="style1"><a href="{% url 'createquestion' %}"><span><strong>Add Question</strong>Click here to see your results.</span></a></li>-->
+<!--          <li class="style1"><a href="{% url 'createuser' %}"><span><strong>Create User</strong>Click here to create users.</span></a></li>-->
+<!--        </ul>-->
+<!--      </div>-->
+      <div class="site-nav" style="position:inherit; width: 91%;margin: 0 auto;">
+        <ul style="margin-top: -100px;">
+          <li class=""><a href="{% url 'papers' %}" style="height:0; width:134px;"><span>Papers</span></a></li>
+          <li class=""><a href="{% url 'createpaper' %}" style="height:0; width:134px;"><span>Add Papers</span></a></li>
+          <li class=""><a href="{% url 'createquestion' %}" style="height:0; width:134px;"><span>Add Question</span></a></li>
+          <li class=""><a href="#" style="height:0; width:134px;"><span></span>Users</a></li>
+          <li class=""><a href="{% url 'createuser' %}" style="height:0; width:134px;"><span>Add User</span></a></li>
+          <li class=""><a href="{% url 'logout' %}" style="height:0; width:134px;"><span>Logout</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- CONTENT -->
+    <div id="content">
+      <div class="wrapper">
+        <div >
+          {% block content %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+    <!-- FOOTER -->
+    <div id="footer">
+
+    </div>
+  </div>
+  <script type="text/javascript"> Cufon.now(); </script>
+  <div style="font-size:14px" align=center>Copyright - Pakiza TVL</div>
+</body>
+
+
+<script>
+  function select_paper() {
+      console.log('hit');
+      var x = document.getElementById("paper_name").value;
+      document.getElementById("hidden_paper_id").value = x;
+      $.ajax(
+    {
+        type:"GET",
+        url: "{% url 'paperlist' %}",
+        data:{
+                 id: x
+        },
+        success: function( data )
+        {
+            var res = data.split(",");
+            document.getElementById("date").value = res[0];
+            document.getElementById("start_time").value = res[1];
+            document.getElementById("end_time").value = res[2];
+            console.log(res)
+        }
+     })
+    }
+
+function add_answer(){
+  var table = document.getElementById("answerTable");
+  var table_len = table.rows.length;
+  document.getElementById("total").value = table_len;
+  var row = table.insertRow(table_len);
+  var answer = document.getElementById("answer").value;
+  var correct = document.getElementById("correct").checked;
+  if (correct == true ) {
+    correct = "Correct";
+  }else {
+    correct = "Wrong";
+  }
+  console.log(answer);
+  var cell1 = row.insertCell(0);
+  var cell2 = row.insertCell(1);
+  var cell3 = row.insertCell(2);
+  cell1.innerHTML = table_len;
+  cell2.innerHTML = "<input class='form-control' style='border:none;background: white;color:black;' readonly='true' name=answer_" + table_len + " value=" + answer + ">";
+  cell3.innerHTML = "<input class='form-control' style='border:none;background: white;color:black;' readonly='true' name=correct_" + table_len + " value=" + correct + ">";
+
+  }
+
+</script>
+</html>

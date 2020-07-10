@@ -1,68 +1,89 @@
 {% extends 'base.html' %}
 {% block content %}
-    <form style="font-size: 14px" method="post" action="{% url 'createquestion' %}">
-        {% csrf_token %}
+
+
+
+
+<div class="card">
+    <form class="form-horizontal" method="post" method="post" action="{% url 'createquestion' %}">
+      {% csrf_token %}
         <input type="hidden" id="hidden_paper_id" name="hidden_paper_id">
         <input type="hidden" id="total" name="total">
-        <label>Paper Name</label>
-        <div style="margin-bottom: 15px">
-
+        <div class="card-body">
+            <h4 class="card-title">Create Paper</h4>
+            <div class="form-group row">
+                <label for="paper_name" class="col-sm-2 text-right control-label col-form-label">Paper Name</label>
+                <div class="col-sm-9">
             <select name="paper_name" id="paper_name" onchange="select_paper()" class="form-control">
                 <option value="-1">------</option>
                 {% for item in paper_list %}
                     <option value={{item.paper_id}}>{{item.paper_name}}</option>
                 {% endfor %}
-            </select>
+            </select>                </div>
+            </div>
+            <div class="form-group row">
+                <label for="date" class="col-sm-2 text-right control-label col-form-label">Paper Date</label>
+                <div class="col-sm-9">
+                  <input type="text" name="unit" class="form-control" id="date" disabled>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="start_time" class="col-sm-2 text-right control-label col-form-label">Start Time</label>
+                <div class="col-sm-9">
+                  <input type="text" name="unit" class="form-control" id="start_time"  disabled>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="end_time" class="col-sm-2 text-right control-label col-form-label">End Time</label>
+                <div class="col-sm-9">
+                   <input type="text" name="unit" class="form-control" id="end_time"  disabled>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="question" class="col-sm-2 text-right control-label col-form-label">Question</label>
+                <div class="col-sm-9">
+                   <input type="text" name="question" class="form-control" id="question" placeholder="Your Question here" >
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="end_time" class="col-sm-2 text-right control-label col-form-label">Answer Choice</label>
+                <div class="col-sm-9">
+                   <div class="form-inline">
+                      <div class="form-group mx-sm-6 mb-4">
+                        <label for="answer" class="sr-only">Answer</label>
+                        <input type="text" class="form-control" id="answer" placeholder="Answer here">
+                      </div>
+
+                        <div class="form-group mx-sm-3 mb-2 form-check">
+                            <input type="checkbox" class="form-check-input" id="correct">
+                            <label class="form-check-label" for="correct">Correct Answer</label>
+                          </div>
+                      <button onclick="add_answer()" type="button" class="btn btn-primary mb-2">Add Answer</button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="end_time" class="col-sm-2 text-right control-label col-form-label">Answer Table</label>
+                <div class="col-sm-9">
+                   <table id="answerTable" class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                            <th scope="col">Answer</th>
+                            <th scope="col">Correct</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-
-        <label for="date" class="text-right control-label col-form-label">Date</label>
-        <div class="" style="margin-bottom: 15px">
-            <input type="text" name="unit" class="form-control" id="date" disabled>
+        <div class="border-top">
+            <div class="card-body" style="text-align: right;">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
         </div>
-
-        <label for="start_time" class=" text-right control-label col-form-label">Start Time</label>
-        <div class="" style="margin-bottom: 15px">
-            <input type="text" name="unit" class="form-control" id="start_time"  disabled>
-        </div>
-
-        <label for="end_time" class=" text-right control-label col-form-label">End Time</label>
-        <div class="" style="margin-bottom: 15px">
-            <input type="text" name="unit" class="form-control" id="end_time"  disabled>
-        </div>
-
-        <hr>
-
-        <label for="question" class=" text-right control-label col-form-label">Question</label>
-        <div class="" style="margin-bottom: 15px">
-            <input type="text" name="unit" class="form-control" id="question" >
-        </div>
-
-        <div class="form-inline">
-          <div class="form-group mx-sm-6 mb-4">
-            <label for="answer" class="sr-only">Answer</label>
-            <input type="text" class="form-control" id="answer" placeholder="Answer here">
-          </div>
-
-            <div class="form-group mx-sm-3 mb-2 form-check">
-                <input type="checkbox" class="form-check-input" id="correct">
-                <label class="form-check-label" for="correct">Correct Answer</label>
-              </div>
-          <button onclick="add_answer()" type="button" class="btn btn-primary mb-2">Add Answer</button>
-        </div>
-        <br>
-        <table id="answerTable" class="table table-bordered">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-                <th scope="col">Answer</th>
-                <th scope="col">Correct</th>
-<!--                <th scope="col">Action</th>-->
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-
-      <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+    </form>
+</div>
 {% endblock %}
